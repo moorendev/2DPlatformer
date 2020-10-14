@@ -5,6 +5,9 @@
 #include "FirstCreation.h"
 #include "PhysicsPlayground.h"
 #include "AnimationSpritePlayground.h"
+<<<<<<< HEAD
 #include "Gamescene.h"
+=======
+>>>>>>> main
 
 #endif // !__SCENES_H__
