@@ -38,9 +38,9 @@ void Game::InitGame()
 	m_scenes.push_back(new FirstCreation("FIRST SCENE!!!!"));
 	m_scenes.push_back(new PhysicsPlayground("PHYSICS PLAYGROUND TIEM!!!"));
 	m_scenes.push_back(new AnimationSpritePlayground("Animation time"));
-	 
+	m_scenes.push_back(new Gamescene("Game Time"));
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[1];
+	m_activeScene = m_scenes[3];
 
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 
