@@ -3,9 +3,6 @@
 
 #include "BackEnd.h"
 
-#define TOPDOWN
-
-
 enum AnimEnums
 {
 	IDLELEFT,
@@ -25,9 +22,18 @@ enum AnimEnums
 	WALKUP,
 	WALKDOWN,
 #endif
+
+	RUNLEFT,
+	RUNRIGHT,
+
+	//Only in Top down
+#ifdef TOPDOWN
+	RUNKUP,
+	RUNDOWN,
+#endif
 	
-	ATTACKLEFT,
-	ATTACKRIGHT,
+	JUMPLEFT,
+	JUMPRIGHT,
 
 	//Only in Top down
 #ifdef TOPDOWN
@@ -41,12 +47,14 @@ enum AnimTypes
 #ifdef TOPDOWN
 	IDLE = 0,
 	WALK = 4,
-	ATTACK = 8
+	RUN = 8,
+	JUMP = 12
 #endif
 #ifndef TOPDOWN
 	IDLE = 0,
 	WALK = 2,
-	ATTACK = 4
+	RUN = 4,
+	JUMP = 6
 #endif
 };
 
@@ -79,11 +87,19 @@ private:
 	void SetActiveAnimation(int anim);
 
 	//Basically, any animation OTHER than moving will not have a cancel, and we'll be checking whether or not that animation is done
-	bool m_moving = false;
-	//Are you currently attacking?????
+	bool m_walking = false;
+	//Is the player running?
+	bool m_running = false;
+	//Is the player currently attacking?
 	bool m_attacking = false;
+	//Is the player currently jumping?
+	bool m_jumping = false;
+	//Is the player currently crouched?
+	bool m_crouched = false;
 	//Have we locked the player from moving during this animation?
 	bool m_locked = false;
+	//Have we locked the player from jumping during this animation?
+	bool m_jumplocked = false;
 
 	//A reference to our sprite
 	Sprite* m_sprite = nullptr;

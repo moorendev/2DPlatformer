@@ -40,10 +40,6 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 	m_animController->AddAnimation(animations["IdleLeft"].get<Animation>());
 	//Idle Right
 	m_animController->AddAnimation(animations["IdleRight"].get<Animation>());
-	//Idle Up
-	m_animController->AddAnimation(animations["IdleUp"].get<Animation>());
-	//Idle Down
-	m_animController->AddAnimation(animations["IdleDown"].get<Animation>());
 
 	//WALK ANIMATIONS\\
 
@@ -51,24 +47,23 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 	m_animController->AddAnimation(animations["WalkLeft"].get<Animation>());
 	//Walk Right
 	m_animController->AddAnimation(animations["WalkRight"].get<Animation>());
-	//Walk Up
-	m_animController->AddAnimation(animations["WalkUp"].get<Animation>());
-	//Walk Down
-	m_animController->AddAnimation(animations["WalkDown"].get<Animation>());
 
-	//ATTACK ANIMATIONS\\
+	//RUN ANIMATIONS\\
 
-	//Attack Left
-	m_animController->AddAnimation(animations["AttackLeft"].get<Animation>());
-	//Attack Right
-	m_animController->AddAnimation(animations["AttackRight"].get<Animation>());
-	//Attack Up
-	m_animController->AddAnimation(animations["AttackUp"].get<Animation>());
-	//Attack Down
-	m_animController->AddAnimation(animations["AttackDown"].get<Animation>());
+	//Run Left
+	m_animController->AddAnimation(animations["RunLeft"].get<Animation>());
+	//Run Right
+	m_animController->AddAnimation(animations["RunRight"].get<Animation>());
+
+	//JUMP ANIMATIONS\\
+
+	//Jump Left
+	m_animController->AddAnimation(animations["JumpLeft"].get<Animation>());
+	//Jump Right
+	m_animController->AddAnimation(animations["JumpRight"].get<Animation>());
 
 	//Set default animation
-	m_animController->SetActiveAnim(IDLELEFT);
+	m_animController->SetActiveAnim(IDLERIGHT);
 
 }
 
@@ -96,16 +91,9 @@ void Player::MovementUpdate()
 			speed *= 7.f;
 		}
 
-		if (Input::GetKey(Key::W))
-		{
-			vel = vel + vec3(0.f, 1.f, 0.f);
-			m_facing = DOWN;
-			m_moving = true;
-		}
 		if (Input::GetKey(Key::S))
 		{
 			vel = vel + vec3(0.f, -1.f, 0.f);
-			m_facing = UP;
 			m_moving = true;
 		}
 
@@ -129,19 +117,11 @@ void Player::MovementUpdate()
 		//Regular Movement
 		float speed = 35.f;
 
-		if (Input::GetKey(Key::W))
-		{
-			m_transform->SetPositionY(m_transform->GetPositionY() + (speed * Timer::deltaTime));
-			m_facing = UP;
-			m_moving = true;
-		}
 		if (Input::GetKey(Key::S))
 		{
 			m_transform->SetPositionY(m_transform->GetPositionY() - (speed * Timer::deltaTime));
-			m_facing = DOWN;
 			m_moving = true;
 		}
-
 		if (Input::GetKey(Key::A))
 		{
 			m_transform->SetPositionX(m_transform->GetPositionX() - (speed * Timer::deltaTime));
@@ -158,14 +138,14 @@ void Player::MovementUpdate()
 
 	if (Input::GetKeyDown(Key::Space))
 	{
-		m_moving = false;
+
 
 		if (m_hasPhysics)
 		{
 			m_physBody->SetVelocity(vec3());
 		}
 
-		m_attacking = true;
+		m_jumping = true;
 		m_locked - true;
 	}
 }
@@ -181,7 +161,7 @@ void Player::AnimationUpdate()
 	}
 	else if (m_attacking)
 	{
-		activeAnimation = ATTACK;
+		activeAnimation = JUMP;
 
 		//Check if the attack animation is done
 		if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
