@@ -160,6 +160,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 
 	}
+	//first platform
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -188,7 +189,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 
 	}
-
+	//bottom tower
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -217,7 +218,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 
 	}
-
+	//tower middle
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -246,6 +247,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 
 	}
+	//tower top middle
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -274,6 +276,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 
 	}
+	//tower top
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -295,6 +298,180 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
 		tempDef.position.Set(float32(100.f), float32(70.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
+
+
+	}
+	//second platform
+	{
+		//creates entity
+		auto entity = ECS::CreateEntity();
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up componets
+		std::string fileName = "brick.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 5);;
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(260.f), float32(40.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
+
+
+	}
+	//third platform
+	{
+		//creates entity
+		auto entity = ECS::CreateEntity();
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up componets
+		std::string fileName = "brick.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 5);;
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(320.f), float32(30.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
+
+
+	}
+	//First stair
+	{
+		//creates entity
+		auto entity = ECS::CreateEntity();
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up componets
+		std::string fileName = "brick.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 5);;
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(350.f), float32(40.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
+
+
+	}
+	//second stair
+	{
+		//creates entity
+		auto entity = ECS::CreateEntity();
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up componets
+		std::string fileName = "brick.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 5);;
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(380.f), float32(50.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
+
+
+	}
+	//third stair
+	{
+		//creates entity
+		auto entity = ECS::CreateEntity();
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up componets
+		std::string fileName = "brick.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 5);;
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(410.f), float32(60.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
+
+
+	}
+	//pillar
+	{
+		//creates entity
+		auto entity = ECS::CreateEntity();
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up componets
+		std::string fileName = "brick.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 100);;
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(460.f), float32(60.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -326,7 +503,7 @@ void Gamescene::KeyboardHold()
 
 	if (Input::GetKey(Key::W))
 	{
-		vel += b2Vec2(0.f, 1.f);
+		vel += b2Vec2(0.f, 5.f);
 
 	}
 	/*if (Input::GetKey(Key::S))
