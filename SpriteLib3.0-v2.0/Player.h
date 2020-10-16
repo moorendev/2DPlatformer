@@ -3,8 +3,6 @@
 
 #include "BackEnd.h"
 
-#define TOPDOWN
-
 
 enum AnimEnums
 {

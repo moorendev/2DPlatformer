@@ -6,7 +6,7 @@ Gamescene::Gamescene(std::string name)
 	:Scene(name)
 {
 	//No gravity this is top down scene
-	m_gravity = b2Vec2(0.f, -9.f);
+	m_gravity = b2Vec2(0.f, -100.f);
 	m_physicsWorld->SetGravity(m_gravity);
 }
 
@@ -65,18 +65,23 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 		ECS::SetIsMainPlayer(entity, true);
 
 		//Add components
+		ECS::AttachComponent<Player>(entity);
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
 
 		//sets up the components
-		std::string fileName = "mario.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 25, 25);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 30.f, 2.f));
+		std::string fileName = "spritesheets/Sonic.png";
+		std::string animations = "sonicAnimations.json";
+
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 40, 40, &ECS::GetComponent<Sprite>(entity),
+			&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity), true, &tempPhsBody);
 
 		float shrinkX = 0.f;
 		float shrinkY = 0.f;
@@ -92,8 +97,6 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetFixedRotation(true);
-
-
 	}
 	//Setup Box
 	//{
@@ -720,7 +723,9 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 void Gamescene::Update()
 {
+	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 	Scene::AdjustScrollOffset();
+	player.Update();
 }
 
 
