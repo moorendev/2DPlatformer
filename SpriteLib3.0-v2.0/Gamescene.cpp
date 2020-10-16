@@ -145,7 +145,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up componets
-		std::string fileName = "brick.png";
+		std::string fileName = "land.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 23440, 40);;
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 2.f));
 
