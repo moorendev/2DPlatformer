@@ -1,5 +1,6 @@
 #include "Gamescene.h"
 #include "Utilities.h"
+using namespace std;
 
 Gamescene::Gamescene(std::string name)
 	:Scene(name)
@@ -728,7 +729,9 @@ void Gamescene::KeyboardHold()
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	float speed = 10.f;
 	b2Vec2 vel = b2Vec2(0.f, 0.f);
-
+	if (player.GetBody()->GetPosition().x >= 1750) {
+		exit(true);
+	}
 	if (Input::GetKey(Key::Shift))
 	{
 		speed *= 3.f;
@@ -737,12 +740,12 @@ void Gamescene::KeyboardHold()
 	if (Input::GetKey(Key::W))
 	{
 		vel += b2Vec2(0.f, 15.f);
-
+		
 	}
 	if (Input::GetKey(Key::S))
 	{
 		vel += b2Vec2(0.f, -1.f);
-
+		
 	}
 	if (Input::GetKey(Key::A))
 	{
@@ -752,7 +755,7 @@ void Gamescene::KeyboardHold()
 	if (Input::GetKey(Key::D))
 	{
 		vel += b2Vec2(1.f, 0.f);
-
+		
 	}
 	player.GetBody()->SetLinearVelocity(speed * vel);
 }
