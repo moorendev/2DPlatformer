@@ -80,7 +80,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 40, 40, &ECS::GetComponent<Sprite>(entity),
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 15, 15, &ECS::GetComponent<Sprite>(entity),
 			&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity), true, &tempPhsBody);
 
 		float shrinkX = 0.f;
