@@ -6,7 +6,6 @@ using namespace std;
 Gamescene::Gamescene(std::string name)
 	:Scene(name)
 {
-	//No gravity this is top down scene
 	m_gravity = b2Vec2(0.f, -50.f);
 	m_physicsWorld->SetGravity(m_gravity);
 }
@@ -15,7 +14,8 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 {
 	//Dynamically allocated the register
 	m_sceneReg = new entt::registry;
-	//Attatch the register
+
+	//Attach the register
 	ECS::AttachRegister(m_sceneReg);
 
 	//Sets up aspect ratio for the camera
@@ -23,14 +23,13 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 	//Setup MainCamera Entity
 	{
-		//Scene::CreateCamera(m_sceneReg,vec4(-75.f,75.f,-75.f,75.f)-100.f,100.f,windowWidth,widowHeight,true,true);
 		//Creates camera entity
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainCamera(entity, true);
 
 		//Creates new orthographic camera
 		ECS::AttachComponent<Camera>(entity);
-		ECS::AttachComponent<HorizontalScroll>(entity);
+		ECS::AttachComponent<HorizontalScroll>(entity); 
 		ECS::AttachComponent<VerticalScroll>(entity);
 
 		vec4 temp = vec4(-100.f, 100.f, -100.f, 100.f);
@@ -42,21 +41,6 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 
-
-	}
-	//Setup new Entity
-	{
-		//Scene::CreatSprite(m_sceneReg,"HelloWorld.png",100,60,0.5f,vec3(0.f,0.f,0.f));
-		//creates entity
-		auto entity = ECS::CreateEntity();
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Set up the components
-		std::string fileName = "super.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 60);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 50.f, 0.f));
 
 	}
 	//Sonic entity creation
@@ -81,7 +65,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
 		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 17, 17, &ECS::GetComponent<Sprite>(entity),
-			&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity), true, &tempPhsBody);
+			&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity));
 
 		float shrinkX = 5.f;
 		float shrinkY = 1.f;
@@ -773,18 +757,24 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 void Gamescene::Update()
 {
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
+	auto& phsPlayer = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	Scene::AdjustScrollOffset();
 	player.Update();
+
+	if (phsPlayer.GetBody()->GetPosition().x >= 1750)
+	{
+		exit(true);
+	}
 }
 
 static bool toggle = true;
-static float accumulate = 0;
 
 void Gamescene::KeyboardHold()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	float sprint = 1.f;
 	b2Vec2 vel = player.GetBody()->GetLinearVelocity();
+
 	if (toggle)
 	{
 		sprint = 1.2;
@@ -794,17 +784,20 @@ void Gamescene::KeyboardHold()
 			{
 				player.GetBody()->ApplyForceToCenter({ -50000 * (Timer::deltaTime - 1) * (Timer::deltaTime - 1), 0 }, true);
 			}
+
 			else if (-20.f > vel.x > -70.f)
 			{
 				player.GetBody()->ApplyForceToCenter({ -7000 * (Timer::deltaTime - 1) * (Timer::deltaTime - 1), 0 }, true);
 			}
 		}
+
 		if (Input::GetKey(Key::D))
 		{
 			if (vel.x < 20.f)
 			{
 				player.GetBody()->ApplyForceToCenter({ 50000 * (Timer::deltaTime - 1) * (Timer::deltaTime - 1), 0 }, true);
 			}
+
 			if (20.f < vel.x < 70.f)
 			{
 				player.GetBody()->ApplyForceToCenter({ 7000 * (Timer::deltaTime - 1) * (Timer::deltaTime - 1), 0 }, true);
@@ -817,14 +810,17 @@ void Gamescene::KeyboardHold()
 		{
 			sprint = 1.2;
 		}
+
 		if (Input::GetKey(Key::A))
 		{
 			vel.x += (sprint * -100.f * Timer::deltaTime);
 		}
+
 		if (Input::GetKey(Key::D))
 		{
 			vel.x += (sprint * 100.f * Timer::deltaTime);
 		}
+
 		vel.x = clamp(vel.x, (sprint * -70.f), (sprint * 70.f));
 		player.GetBody()->SetLinearVelocity(vel);
 	}
@@ -834,7 +830,8 @@ void Gamescene::KeyboardDown()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	b2Vec2 vel = player.GetBody()->GetLinearVelocity();
-	if (Input::GetKeyDown(Key::Space))
+
+	if (Input::GetKeyDown(Key::Space) || Input::GetKeyDown(Key::W))
 	{
 		if (player.GetBody()->GetLinearVelocity().y == float32())
 		{
@@ -842,14 +839,7 @@ void Gamescene::KeyboardDown()
 			player.GetBody()->SetLinearVelocity(vel);
 		}
 	}
-	if (Input::GetKeyDown(Key::W))
-	{
-		if (player.GetBody()->GetLinearVelocity().y == float32())
-		{
-			vel += b2Vec2(0.f, 70.f);
-			player.GetBody()->SetLinearVelocity(vel);
-		}
-	}
+
 	if (Input::GetKeyDown(Key::T))
 	{
 		toggle = !toggle;
@@ -861,13 +851,21 @@ void Gamescene::KeyboardUp()
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	float sprint = 1.f;
 	b2Vec2 vel = player.GetBody()->GetLinearVelocity();
+
+	if (Input::GetKey(Key::Shift))
+	{
+		sprint = 1.2;
+	}
+
 	if (Input::GetKeyUp(Key::A))
 	{
-		vel.x += (100.f * Timer::deltaTime);
+		vel.x += (sprint * 100.f * Timer::deltaTime);
 	}
+
 	if (Input::GetKeyUp(Key::D))
 	{
-		vel.x += (-100.f * Timer::deltaTime);
+		vel.x += (sprint * -100.f * Timer::deltaTime);
 	}
+	player.GetBody()->SetLinearVelocity(vel);
 }
 
