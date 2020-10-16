@@ -68,93 +68,39 @@ void Player::Update()
 
 void Player::MovementUpdate()
 {
-	if (m_hasPhysics)
-	{
 		m_moving = false;
+		m_attacking = false;
+		auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 
-		float speed = 10.f;
-		vec3 vel = vec3(0.f, 0.f, 0.f);
-
-		if (Input::GetKey(Key::Shift))
-		{
-			speed *= 7.f;
-		}
-		if (Input::GetKey(Key::S))
-		{
-			vel = vel + vec3(0.f, -1.f, 0.f);
-			m_moving = true;
-		}
 		if (Input::GetKey(Key::A))
 		{
-			vel = vel + vec3(-1.f, 0.f, 0.f);
 			m_facing = LEFT;
 			m_moving = true;
 		}
 		if (Input::GetKey(Key::D))
 		{
-			vel = vel + vec3(1.f, 0.f, 0.f);
 			m_facing = RIGHT;
 			m_moving = true;
 		}
-	}
-	else
-	{
-		//Regular Movement
-		float speed = 35.f;
-
-		if (Input::GetKey(Key::W))
-		{
-			m_transform->SetPositionY(m_transform->GetPositionY() + (speed * Timer::deltaTime));
-			m_moving = true;
-		}
-		if (Input::GetKey(Key::S))
-		{
-			m_transform->SetPositionY(m_transform->GetPositionY() - (speed * Timer::deltaTime));
-			m_moving = true;
-		}
-
-		if (Input::GetKey(Key::A))
-		{
-			m_transform->SetPositionX(m_transform->GetPositionX() - (speed * Timer::deltaTime));
-			m_facing = LEFT;
-			m_moving = true;
-		}
-		if (Input::GetKey(Key::D))
-		{
-			m_transform->SetPositionX(m_transform->GetPositionX() + (speed * Timer::deltaTime));
-			m_facing = RIGHT;
-			m_moving = true;
-		}
-	}
 }
 
 void Player::AnimationUpdate()
 {
 	int activeAnimation = 0;
 
-	if (m_moving)
+	if (!(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().y == float32()))
+	{
+		//Puts it into ATTACK category
+		activeAnimation = ATTACK;
+	}
+	else if (m_moving)
 	{
 		//Puts it into the WALK category
 		activeAnimation = WALK;
 	}
-	else if (m_attacking)
-	{
-		activeAnimation = ATTACK;
-
-		//Check if the attack animation is done
-		if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
-		{
-		//Will auto set to idle
-			m_locked = false;
-			m_attacking = false;
-			//Resets the attack animation
-			m_animController->GetAnimation(m_animController->GetActiveAnim()).Reset();
-		
-			activeAnimation = IDLE;
-		}
-	}
 	else
 	{
+		//Puts it into IDLE category
 		activeAnimation = IDLE;
 	}
 

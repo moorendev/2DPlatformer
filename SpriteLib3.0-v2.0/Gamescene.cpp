@@ -1,12 +1,13 @@
 #include "Gamescene.h"
 #include "Utilities.h"
+#include <time.h>
 using namespace std;
 
 Gamescene::Gamescene(std::string name)
 	:Scene(name)
 {
 	//No gravity this is top down scene
-	m_gravity = b2Vec2(0.f, -100.f);
+	m_gravity = b2Vec2(0.f, -50.f);
 	m_physicsWorld->SetGravity(m_gravity);
 }
 
@@ -728,49 +729,49 @@ void Gamescene::Update()
 	player.Update();
 }
 
-
 void Gamescene::KeyboardHold()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-	float speed = 10.f;
-	b2Vec2 vel = b2Vec2(0.f, 0.f);
-	if (player.GetBody()->GetPosition().x >= 1750) {
+	b2Vec2 vel = player.GetBody()->GetLinearVelocity();
+	if (player.GetBody()->GetPosition().x >= 1750) 
+	{
 		exit(true);
 	}
-	if (Input::GetKey(Key::Shift))
+	if (Input::GetKeyDown(Key::W))
 	{
-		speed *= 3.f;
-	}
-
-	if (Input::GetKey(Key::W)) {
-		if (player.GetBody()->GetLinearVelocity() == b2Vec2(0.f, float32())) {
-			vel += b2Vec2(0.f, 10000.f);
-			player.GetBody()->SetLinearVelocity(speed * vel);
+		if (player.GetBody()->GetLinearVelocity().y == float32())
+		{
+			vel.y = 70.f;
 		}
-	}
-	if (Input::GetKey(Key::S))
-	{
-		vel += b2Vec2(0.f, -100.f);
-		
 	}
 	if (Input::GetKey(Key::A))
 	{
-		vel += b2Vec2(-1.f, 0.f);
-
+		vel.x = -10.f;
 	}
 	if (Input::GetKey(Key::D))
 	{
-		vel += b2Vec2(1.f, 0.f);
-		
+		vel.x = 10.f;
 	}
-	player.GetBody()->SetLinearVelocity(speed * vel);
+	player.GetBody()->SetLinearVelocity(vel);
 }
 
 void Gamescene::KeyboardDown()
 {
+	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+	float speed = 10.f;
+	b2Vec2 vel = player.GetBody()->GetLinearVelocity();
+	if (Input::GetKeyDown(Key::Space))
+	{
+		if (player.GetBody()->GetLinearVelocity().y == float32())
+		{
+			vel += b2Vec2(0.f, 3.f);
+			player.GetBody()->SetLinearVelocity(speed * vel);
+		}
+	}
 }
 
 void Gamescene::KeyboardUp()
 {
+
 }
 
