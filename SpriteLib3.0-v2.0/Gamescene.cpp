@@ -732,10 +732,15 @@ void Gamescene::Update()
 void Gamescene::KeyboardHold()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+	float sprint = 1.f;
 	b2Vec2 vel = player.GetBody()->GetLinearVelocity();
 	if (player.GetBody()->GetPosition().x >= 1750) 
 	{
 		exit(true);
+	}
+	if (Input::GetKey(Key::Shift))
+	{
+		sprint = 1.2;
 	}
 	if (Input::GetKeyDown(Key::W))
 	{
@@ -746,26 +751,27 @@ void Gamescene::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		vel.x += (-100.f * Timer::deltaTime);
+		vel.x += (sprint * -100.f * Timer::deltaTime);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		vel.x += (100.f * Timer::deltaTime);
+		vel.x += (sprint * 100.f * Timer::deltaTime);
 	}
-	vel.x = clamp(vel.x, -30.f, 30.f);
+	vel.x = clamp(vel.x, (sprint * -30.f), (sprint * 30.f));
 	player.GetBody()->SetLinearVelocity(vel);
+
 }
 
 void Gamescene::KeyboardDown()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-	float speed = 10.f;
+	float speed = 1.f;
 	b2Vec2 vel = player.GetBody()->GetLinearVelocity();
 	if (Input::GetKeyDown(Key::Space))
 	{
 		if (player.GetBody()->GetLinearVelocity().y == float32())
 		{
-			vel += b2Vec2(0.f, 3.f);
+			vel += b2Vec2(0.f, 70.f);
 			player.GetBody()->SetLinearVelocity(speed * vel);
 		}
 	}
@@ -773,6 +779,16 @@ void Gamescene::KeyboardDown()
 
 void Gamescene::KeyboardUp()
 {
-
+	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+	float sprint = 1.f;
+	b2Vec2 vel = player.GetBody()->GetLinearVelocity();
+	if (Input::GetKeyUp(Key::A))
+	{
+		vel.x += (100.f * Timer::deltaTime);
+	}
+	if (Input::GetKeyUp(Key::D))
+	{
+		vel.x += (-100.f * Timer::deltaTime);
+	}
 }
 

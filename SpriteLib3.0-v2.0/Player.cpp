@@ -75,12 +75,10 @@ void Player::MovementUpdate()
 		if (Input::GetKey(Key::A))
 		{
 			m_facing = LEFT;
-			m_moving = true;
 		}
 		if (Input::GetKey(Key::D))
 		{
 			m_facing = RIGHT;
-			m_moving = true;
 		}
 }
 
@@ -93,7 +91,7 @@ void Player::AnimationUpdate()
 		//Puts it into ATTACK category
 		activeAnimation = ATTACK;
 	}
-	else if (m_moving)
+	else if (!(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().x == float32()))
 	{
 		//Puts it into the WALK category
 		activeAnimation = WALK;
