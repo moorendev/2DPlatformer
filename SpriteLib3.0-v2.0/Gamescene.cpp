@@ -59,9 +59,8 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 50.f, 0.f));
 
 	}
-	//Link entity
+	//Sonic entity creation
 	{
-		//Scene::CreatePhysicsSprite(m_sceneRed,"LinkStandby:,80,60,1.f,vec3(0.f,30.f,2.f)b2_dynamicBody,0.f,0.f,true,true);
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
 
@@ -98,42 +97,6 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetFixedRotation(true);
-	}
-	//Setup Box
-	//{
-	//	//Creates entity
-	//	auto entity = ECS::CreateEntity();
-
-	//	//Add components
-	//	ECS::AttachComponent<Sprite>(entity);
-	//	ECS::AttachComponent<Transform>(entity);
-	//	ECS::AttachComponent<PhysicsBody>(entity);
-
-	//	//sets up components
-	//	std::string fileName = "qsmark.png";
-	//	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 20);
-	//	ECS::GetComponent<Transform>(entity).SetPosition(vec3(-30.f, -30.f, 2.f));
-
-	//	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-	//	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-
-	//	float shrinkX = 0.f;
-	//	float shrinkY = 0.f;
-
-	//	b2Body* tempBody;
-	//	b2BodyDef tempDef;
-
-	//	tempDef.type = b2_dynamicBody;
-	//	tempDef.position.Set(float32(-30.f), float32(-20.f));
-
-	//	tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-	//	tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
-
-	//}
-
-	{
-
 	}
 
 	//setup static box
@@ -600,7 +563,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 
 	}
-	//end room hallway
+	//End room hallway
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -629,7 +592,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 
 	}
-	//end room wall
+	//End room wall
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -658,7 +621,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 
 	}
-	//end room roof
+	//End room roof
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -745,7 +708,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 
 	}
-	//jump sign
+	//Jump sign
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -774,6 +737,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 
 	}
+	//Toggle sign
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -804,7 +768,6 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 	}
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
-	
 }
 
 void Gamescene::Update()
@@ -822,10 +785,6 @@ void Gamescene::KeyboardHold()
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	float sprint = 1.f;
 	b2Vec2 vel = player.GetBody()->GetLinearVelocity();
-	if (player.GetBody()->GetPosition().x >= 1750) 
-	{
-		exit(true);
-	}
 	if (toggle)
 	{
 		sprint = 1.2;
