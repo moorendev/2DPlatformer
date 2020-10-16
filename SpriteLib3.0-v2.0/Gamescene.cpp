@@ -81,11 +81,11 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 15, 15, &ECS::GetComponent<Sprite>(entity),
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 17, 17, &ECS::GetComponent<Sprite>(entity),
 			&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity), true, &tempPhsBody);
 
-		float shrinkX = 0.f;
-		float shrinkY = 0.f;
+		float shrinkX = 2.f;
+		float shrinkY = 2.f;
 
 
 		b2Body* tempBody;
@@ -746,12 +746,13 @@ void Gamescene::KeyboardHold()
 	}
 	if (Input::GetKey(Key::A))
 	{
-		vel.x = -10.f;
+		vel.x += (-100.f * Timer::deltaTime);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		vel.x = 10.f;
+		vel.x += (100.f * Timer::deltaTime);
 	}
+	vel.x = clamp(vel.x, -30.f, 30.f);
 	player.GetBody()->SetLinearVelocity(vel);
 }
 
