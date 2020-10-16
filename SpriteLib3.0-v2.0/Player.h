@@ -23,6 +23,15 @@ enum AnimEnums
 	WALKUP,
 	WALKDOWN,
 #endif
+
+	RUNLEFT,
+	RUNRIGHT,
+
+	//Only in Top down
+#ifdef TOPDOWN
+	RUNUP,
+	RUNDOWN,
+#endif
 	
 	ATTACKLEFT,
 	ATTACKRIGHT,
@@ -39,12 +48,14 @@ enum AnimTypes
 #ifdef TOPDOWN
 	IDLE = 0,
 	WALK = 4,
-	ATTACK = 8
+	RUN = 8,
+	ATTACK = 12
 #endif
 #ifndef TOPDOWN
 	IDLE = 0,
 	WALK = 2,
-	ATTACK = 4
+	RUN = 4,
+	ATTACK = 6
 #endif
 };
 

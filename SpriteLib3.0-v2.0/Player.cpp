@@ -48,6 +48,13 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 	//Walk Right
 	m_animController->AddAnimation(animations["WalkRight"].get<Animation>());
 
+	//RUN ANIMATIONS\\
+
+	//Run Left
+	m_animController->AddAnimation(animations["RunLeft"].get<Animation>());
+	//Run Right
+	m_animController->AddAnimation(animations["RunRight"].get<Animation>());
+
 	//ATTACK ANIMATIONS\\
 
 	//Attack Left
@@ -85,13 +92,19 @@ void Player::MovementUpdate()
 void Player::AnimationUpdate()
 {
 	int activeAnimation = 0;
+	float tempVel = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().x;
 
 	if (!(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().y == float32()))
 	{
 		//Puts it into ATTACK category
 		activeAnimation = ATTACK;
 	}
-	else if (!(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->GetLinearVelocity().x == float32()))
+	else if (tempVel > 25.f | tempVel < -25.f)
+	{
+		//Puts it into the RUN category
+		activeAnimation = RUN;
+	}
+	else if (!(tempVel == float32()))
 	{
 		//Puts it into the WALK category
 		activeAnimation = WALK;
