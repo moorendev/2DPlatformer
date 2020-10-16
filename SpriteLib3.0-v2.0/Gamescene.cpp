@@ -6,7 +6,7 @@ Gamescene::Gamescene(std::string name)
 	:Scene(name)
 {
 	//No gravity this is top down scene
-	m_gravity = b2Vec2(0.f, -200.f);
+	m_gravity = b2Vec2(0.f, -9.f);
 	m_physicsWorld->SetGravity(m_gravity);
 }
 
@@ -560,7 +560,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(860.f), float32(15.f));
+		tempDef.position.Set(float32(860.f), float32(5.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -684,7 +684,7 @@ void Gamescene::InitScene(float windowWidth, float windowHeight)
 
 
 	}
-
+	//Win sign
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -737,14 +737,15 @@ void Gamescene::KeyboardHold()
 		speed *= 3.f;
 	}
 
-	if (Input::GetKey(Key::W))
-	{
-		vel += b2Vec2(0.f, 15.f);
-		
+	if (Input::GetKey(Key::W)) {
+		if (player.GetBody()->GetLinearVelocity() == b2Vec2(0.f, float32())) {
+			vel += b2Vec2(0.f, 10000.f);
+			player.GetBody()->SetLinearVelocity(speed * vel);
+		}
 	}
 	if (Input::GetKey(Key::S))
 	{
-		vel += b2Vec2(0.f, -1.f);
+		vel += b2Vec2(0.f, -100.f);
 		
 	}
 	if (Input::GetKey(Key::A))
