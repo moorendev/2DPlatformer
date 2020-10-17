@@ -760,7 +760,6 @@ void Gamescene::Update()
 	auto& phsPlayer = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	Scene::AdjustScrollOffset();
 	player.Update();
-
 	if (phsPlayer.GetBody()->GetPosition().x >= 1750)
 	{
 		exit(true);
@@ -768,6 +767,8 @@ void Gamescene::Update()
 }
 
 static bool toggle = true;
+static bool toggleOutput = false;
+float lastTime = 1;
 
 void Gamescene::KeyboardHold()
 {
@@ -843,6 +844,19 @@ void Gamescene::KeyboardDown()
 	if (Input::GetKeyDown(Key::T))
 	{
 		toggle = !toggle;
+	}
+	if (Input::GetKeyDown(Key::O))
+	{
+		toggleOutput = !toggleOutput;
+	}
+	if (toggleOutput == true)
+	{
+		if ((Timer::time - lastTime) >= 0.1)
+		{
+			cout << "Delta time: " << Timer::time - lastTime << endl;
+			lastTime = Timer::time;
+			cout << "Position: " << player.GetBody()->GetPosition().x << " Time: " << Timer::time << endl;
+		}
 	}
 }
 
